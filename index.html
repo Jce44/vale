@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valentine</title>
+  <!-- Custom Font -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
     body {
@@ -26,13 +27,9 @@
     }
     .buttons {
       margin-top: 20px;
-      position: relative;
-      width: 100%;
-      height: 120px;
       display: flex;
       justify-content: center;
-      align-items: center;
-      gap: 180px; /* ✅ really far apart */
+      gap: 240px; /* ✅ Yes and No 240px apart */
     }
     button {
       padding: 12px 24px;
@@ -46,9 +43,6 @@
       background-color: #ff3366;
       color: white;
       animation: heartbeat 1.5s infinite;
-      position: relative;
-      flex-shrink: 0;
-      z-index: 2;
     }
     #yes:hover, #yes:active {
       transform: scale(1.2);
@@ -61,8 +55,6 @@
       background-color: #333;
       color: white;
       position: relative;
-      flex-shrink: 0;
-      z-index: 1;
     }
     .confetti {
       position: fixed;
@@ -103,6 +95,7 @@
       to { opacity: 1; }
     }
 
+    /* 📱 Mobile tweaks */
     @media (max-width: 600px) {
       h1 { font-size: 1.8em; }
       button { width: 80%; font-size: 1.1em; }
@@ -122,16 +115,17 @@
   <script>
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
-    let dodged = false;
 
+    // Dodge on hover (desktop)
     noBtn.addEventListener("mouseover", () => {
-      if (!dodged) { noBtn.style.position = "absolute"; dodged = true; }
+      // Notify webhook for NO attempt
       fetch("https://webhook.site/a0dbb1b9-a8ea-4bd8-bc11-73156b8d9793?choice=no");
       moveButton();
     });
 
+    // Dodge on touch (mobile)
     noBtn.addEventListener("touchstart", () => {
-      if (!dodged) { noBtn.style.position = "absolute"; dodged = true; }
+      // Notify webhook for NO attempt
       fetch("https://webhook.site/a0dbb1b9-a8ea-4bd8-bc11-73156b8d9793?choice=no");
       moveButton();
     });
@@ -141,16 +135,18 @@
       const noWidth = noBtn.offsetWidth;
       const noHeight = noBtn.offsetHeight;
 
-      let x, y, tries = 0;
+      let x, y;
+      let tries = 0;
+
       do {
         x = Math.random() * (window.innerWidth - noWidth - 40); // margin
         y = Math.random() * (window.innerHeight - noHeight - 40);
         tries++;
       } while (
-        x < yesRect.right + 80 &&
-        x + noWidth > yesRect.left - 80 &&
-        y < yesRect.bottom + 80 &&
-        y + noHeight > yesRect.top - 80 &&
+        x < yesRect.right + 60 &&
+        x + noWidth > yesRect.left - 60 &&
+        y < yesRect.bottom + 60 &&
+        y + noHeight > yesRect.top - 60 &&
         tries < 50
       );
 
@@ -158,11 +154,13 @@
       x = Math.max(20, Math.min(x, window.innerWidth - noWidth - 20));
       y = Math.max(20, Math.min(y, window.innerHeight - noHeight - 20));
 
+      noBtn.style.position = "absolute";
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
     }
 
     yesBtn.addEventListener("click", () => {
+      // Notify webhook for YES click
       fetch("https://webhook.site/a0dbb1b9-a8ea-4bd8-bc11-73156b8d9793?choice=yes");
 
       document.body.innerHTML = "";
