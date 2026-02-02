@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>test site</title>
+  <title>Special Message</title>
   <!-- Custom Font -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
@@ -27,9 +27,9 @@
     }
     .buttons {
       margin-top: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      position: relative; /* allows No button to move freely */
+      width: 100%;
+      height: 100px;
     }
     button {
       padding: 12px 24px;
@@ -44,6 +44,8 @@
       background-color: #ff3366;
       color: white;
       animation: heartbeat 1.5s infinite;
+      position: relative; /* stays fixed in place */
+      z-index: 2;
     }
     #yes:hover, #yes:active {
       transform: scale(1.2);
@@ -55,7 +57,10 @@
     #no {
       background-color: #333;
       color: white;
-      position: relative;
+      position: absolute; /* always absolute so it never affects Yes */
+      top: 0;
+      left: 50%; /* starting position */
+      z-index: 1;
     }
     .confetti {
       position: fixed;
@@ -115,10 +120,10 @@
   </style>
 </head>
 <body>
-  <h1>💖 Will you be my Valentine? 💖</h1>
+  <h1>✨ Special Message ✨</h1>
   <div class="buttons">
-    <button id="yes">Yes 💕</button>
-    <button id="no">No 💔</button>
+    <button id="yes">Open</button>
+    <button id="no">Close</button>
   </div>
   <div id="result"></div>
 
@@ -156,7 +161,6 @@
         tries < 50
       );
 
-      noBtn.style.position = "absolute";
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
     }
@@ -165,11 +169,11 @@
       document.body.innerHTML = "";
       const yay = document.createElement("div");
       yay.className = "yay";
-      yay.innerText = "YAAAYYYY 💖🎉💘";
+      yay.innerText = "Surprise Unlocked! 🎉✨";
       document.body.appendChild(yay);
 
       const gif = document.createElement("img");
-      gif.src = "https://media.tenor.com/1ZzXzGJZK8gAAAAC/valentine-love.gif";
+      gif.src = "https://media.tenor.com/2uyENRqaYBkAAAAC/cool-yeah.gif";
       gif.className = "gif";
       document.body.appendChild(gif);
 
@@ -186,5 +190,3 @@
   </script>
 </body>
 </html>
-
-
