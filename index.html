@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valentine</title>
+  <!-- Custom Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
     body {
       text-align: center;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-family: 'Pacifico', cursive;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
       height: 100vh;
       display: flex;
@@ -41,6 +43,11 @@
     #yes {
       background-color: #ff3366;
       color: white;
+      transition: transform 0.3s ease;
+    }
+    /* Yes button grows bigger */
+    #yes:hover, #yes:active {
+      transform: scale(1.2);
     }
     #no {
       background-color: #333;
@@ -85,6 +92,10 @@
       .yay {
         font-size: 2em;
       }
+      /* Confetti slower on mobile */
+      .confetti {
+        animation: fall 5s linear forwards;
+      }
     }
   </style>
 </head>
@@ -123,8 +134,8 @@
         y = Math.random() * (window.innerHeight - noHeight);
         tries++;
       } while (
-        // Check overlap with Yes button
-        x < yesRect.right + 50 &&   // add buffer of 50px
+        // Prevent overlap with Yes button (with buffer)
+        x < yesRect.right + 50 &&
         x + noWidth > yesRect.left - 50 &&
         y < yesRect.bottom + 50 &&
         y + noHeight > yesRect.top - 50 &&
@@ -144,6 +155,13 @@
       yay.innerText = "YAAAYYYY 💖🎉💘";
       document.body.appendChild(yay);
 
+      // Animated GIF or image
+      const gif = document.createElement("img");
+      gif.src = "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif"; // Valentine GIF
+      gif.style.marginTop = "20px";
+      gif.style.maxWidth = "80%";
+      document.body.appendChild(gif);
+
       // Confetti hearts
       for (let i = 0; i < 80; i++) {
         const confetti = document.createElement("div");
@@ -152,7 +170,7 @@
         confetti.style.top = "-10px";
         confetti.style.backgroundColor = ["#ff3366","#ff6699","#ffcc00","#66ffcc","#66ccff"][Math.floor(Math.random()*5)];
         document.body.appendChild(confetti);
-        setTimeout(() => confetti.remove(), 3000);
+        setTimeout(() => confetti.remove(), 5000);
       }
     });
   </script>
