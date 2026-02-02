@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valentine</title>
   <style>
     body {
@@ -13,19 +14,24 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      margin: 0;
       overflow: hidden;
     }
     h1 {
-      font-size: 3em;
+      font-size: 2.2em;
       color: #fff;
       text-shadow: 2px 2px 5px #ff3366;
+      margin: 0 10px;
     }
     .buttons {
-      margin-top: 30px;
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     button {
-      padding: 15px 30px;
-      font-size: 1.2em;
+      padding: 12px 24px;
+      font-size: 1em;
       border: none;
       border-radius: 10px;
       cursor: pointer;
@@ -43,10 +49,11 @@
     }
     .confetti {
       position: fixed;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       background-color: red;
       animation: fall 3s linear forwards;
+      border-radius: 50%;
     }
     @keyframes fall {
       to {
@@ -55,7 +62,7 @@
       }
     }
     .yay {
-      font-size: 4em;
+      font-size: 2.5em;
       color: #fff;
       text-shadow: 3px 3px 10px #ff3366;
       margin-top: 20px;
@@ -64,6 +71,20 @@
     @keyframes pop {
       from { transform: scale(0); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
+    }
+
+    /* 📱 Mobile tweaks */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8em;
+      }
+      button {
+        width: 80%;
+        font-size: 1.1em;
+      }
+      .yay {
+        font-size: 2em;
+      }
     }
   </style>
 </head>
@@ -78,27 +99,44 @@
   <script>
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
-    const result = document.getElementById("result");
 
-    // Make "No" button dodge
+    // Dodge on hover (desktop)
     noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-      noBtn.style.position = "absolute";
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
+      moveButton();
     });
 
-    // For mobile (touch)
+    // Dodge on touch (mobile)
     noBtn.addEventListener("touchstart", () => {
-      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      moveButton();
+    });
+
+    function moveButton() {
+      const yesRect = yesBtn.getBoundingClientRect();
+      const noWidth = noBtn.offsetWidth;
+      const noHeight = noBtn.offsetHeight;
+
+      let x, y;
+      let tries = 0;
+
+      do {
+        x = Math.random() * (window.innerWidth - noWidth);
+        y = Math.random() * (window.innerHeight - noHeight);
+        tries++;
+      } while (
+        // Check overlap with Yes button
+        x < yesRect.right + 50 &&   // add buffer of 50px
+        x + noWidth > yesRect.left - 50 &&
+        y < yesRect.bottom + 50 &&
+        y + noHeight > yesRect.top - 50 &&
+        tries < 50
+      );
+
       noBtn.style.position = "absolute";
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
-    });
+    }
 
-    // When "Yes" is clicked
+    // Yes button click
     yesBtn.addEventListener("click", () => {
       document.body.innerHTML = "";
       const yay = document.createElement("div");
@@ -107,7 +145,7 @@
       document.body.appendChild(yay);
 
       // Confetti hearts
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 80; i++) {
         const confetti = document.createElement("div");
         confetti.className = "confetti";
         confetti.style.left = Math.random() * window.innerWidth + "px";
